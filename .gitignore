@@ -1,0 +1,9 @@
+# Build Folder
+build
+
+# Test coverage report
+coverage
+
+node_modules/
+
+.eslintcache

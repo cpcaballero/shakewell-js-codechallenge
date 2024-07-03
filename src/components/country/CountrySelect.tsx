@@ -1,5 +1,5 @@
 import countries from "i18n-iso-countries";
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 import { CountrySelectOption } from "./CountrySelectOption";
 
 // Register countries
@@ -9,13 +9,22 @@ countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 // Please replace "any" with a proper type in this file (and where it is needed).
 
 // Props
+interface SelectProps {
+  value: CountryProps;
+  label: string;
+}
+export interface CountryProps {
+  code: string;
+  name: string;
+}
+
 interface CountrySelectProps {
-  value?: any;
-  onChange?: (value: any) => void;
+  value?: CountryProps;
+  onChange?: (value: CountryProps) => void;
 }
 
 // Constants
-export const DEFAULT_COUNTRY = {
+export const DEFAULT_COUNTRY: CountryProps = {
   code: "US",
   name: "United States of America",
 };
@@ -34,7 +43,7 @@ export const CountrySelect = ({
       label: name,
     };
   });
-  const defaultValue = { value: value, label: value.name };
+  const defaultValue: SelectProps = { value: value, label: value.name };
 
   // Render
   return (
@@ -42,11 +51,12 @@ export const CountrySelect = ({
       <label>
         Country
         <Select
+          isMulti={false}
           options={data}
           components={{ Option: CountrySelectOption }}
           defaultValue={defaultValue}
-          onChange={(newValue) => {
-            onChange(newValue.value);
+          onChange={(newValue: SingleValue<SelectProps>) => {
+            onChange?.(newValue?.value || defaultValue.value);
           }}
         />
       </label>
