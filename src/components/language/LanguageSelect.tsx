@@ -1,20 +1,18 @@
 import ISO_6391_Languages from "iso-639-1";
 
 import Select, { SingleValue } from "react-select";
+import { DEFAULT_LANGUAGE } from "../../constants";
 
 // Props
 interface LanguageSelectProps {
   language?: string;
-  onChange?: (language: string) => void;
+  onChange?: (name: string, language: string) => void;
 }
 
 interface SelectProps {
   value: string;
   label: string;
 }
-
-// Constants
-export const DEFAULT_LANGUAGE = "English - English";
 
 // Component
 const LanguageSelect = ({
@@ -47,7 +45,10 @@ const LanguageSelect = ({
           options={data}
           defaultValue={defaultValue}
           onChange={(newValue: SingleValue<SelectProps>) => {
-            onChange?.(newValue?.value || defaultValue.value);
+            onChange?.(
+              "selectedLanguage",
+              newValue?.value || defaultValue.value
+            );
           }}
         />
       </label>
