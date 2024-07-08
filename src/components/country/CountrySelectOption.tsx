@@ -1,5 +1,7 @@
-import { OptionProps, components } from "react-select";
+import { OptionProps, SingleValueProps, components } from "react-select";
+import { CountryProps } from "./CountrySelect";
 
+import "./CountrySelectOption.css";
 /* --- [TASK] ---
 Country flags in select field
 
@@ -19,11 +21,35 @@ FURTHER DETAILS
 - Flags appearing on the `SettingsSelector`-Button is optional
 --- [TASK] --- */
 
+interface OptionType {
+  value: CountryProps;
+  label: string;
+  svg: string;
+}
+
 // Component
-export const CountrySelectOption = (props: OptionProps<any>) => {
-  return (
-    <div>
-      <components.Option {...props} />
+export const CountrySelectOption = (props: OptionProps<OptionType>) => (
+  <components.Option {...props}>
+    <div className="selectorOption">
+      <div
+        className="flagIcon"
+        dangerouslySetInnerHTML={{ __html: props.data.svg }}
+      />
+      <div>{props.data.label}</div>
     </div>
-  );
-};
+  </components.Option>
+);
+
+export const CountrySingleValueOption = (
+  props: SingleValueProps<OptionType>
+) => (
+  <components.SingleValue {...props}>
+    <div className="selectorOption">
+      <div
+        className="flagIcon"
+        dangerouslySetInnerHTML={{ __html: props.data.svg }}
+      />
+      <div>{props.data.label}</div>
+    </div>
+  </components.SingleValue>
+);
