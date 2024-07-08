@@ -149,9 +149,10 @@ const SettingsSelector = (): JSX.Element => {
     name: string,
     value: string | CountryProps
   ) => {
+    console.log(value);
     setSelectedOptions({
       ...selectedOptions,
-      [name]: typeof value === "string" ? value : value.name,
+      [name]: value,
     });
   };
 
@@ -170,7 +171,7 @@ const SettingsSelector = (): JSX.Element => {
 
   const handleSave = useCallback(() => {
     setButtonLabel(
-      `${selectedCountry} - (${selectedCurrency} - ${selectedLanguage})`
+      `${selectedCountry.name} - (${selectedCurrency} - ${selectedLanguage})`
     );
     handleClose();
   }, [selectedOptions]);
