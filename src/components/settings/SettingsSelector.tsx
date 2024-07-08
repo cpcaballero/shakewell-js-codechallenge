@@ -99,9 +99,7 @@ FURTHER DETAILS
 --- [TASK] --- */
 
 interface SelectedSettingsButtonProps {
-  selectedCountryName: string;
-  selectedCurrency: string;
-  selectedLanguage: string;
+  buttonLabel: string;
   handleOpen: () => void;
   incrementCounter: () => void;
   counter: RefObject<number>;
@@ -110,9 +108,7 @@ interface SelectedSettingsButtonProps {
 // Component
 const SettingsSelectorButton = React.memo(
   ({
-    selectedCountryName,
-    selectedCurrency,
-    selectedLanguage,
+    buttonLabel,
     handleOpen,
     incrementCounter,
     counter,
@@ -124,11 +120,7 @@ const SettingsSelectorButton = React.memo(
     console.log("Render count of button is: " + counter.current);
 
     /* Button */
-    return (
-      <button onClick={handleOpen}>
-        {selectedCountryName} - ({selectedCurrency} - {selectedLanguage})
-      </button>
-    );
+    return <button onClick={handleOpen}>{buttonLabel}</button>;
   }
 );
 
@@ -147,9 +139,21 @@ const SettingsSelector = (): JSX.Element => {
     selectedCurrency: DEFAULT_CURRENCY,
     selectedLanguage: DEFAULT_LANGUAGE,
   });
+  const { selectedCountry, selectedCurrency, selectedLanguage } =
+    selectedOptions;
+  const [buttonLabel, setButtonLabel] = useState(
+    `${selectedCountry.name} - (${selectedCurrency} - ${selectedLanguage})`
+  );
 
-  const handleSelectionChanges = (name: string, value: string | CountryProps) =>
-    setSelectedOptions({ ...selectedOptions, [name]: value });
+  const handleSelectionChanges = (
+    name: string,
+    value: string | CountryProps
+  ) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [name]: typeof value === "string" ? value : value.name,
+    });
+  };
 
   // Render Counter
   const counter = useRef<number>(0);
@@ -164,13 +168,18 @@ const SettingsSelector = (): JSX.Element => {
     setModalIsOpen(false);
   }, []);
 
+  const handleSave = useCallback(() => {
+    setButtonLabel(
+      `${selectedCountry} - (${selectedCurrency} - ${selectedLanguage})`
+    );
+    handleClose();
+  }, [selectedOptions]);
+
   // Render
   return (
     <div>
       <SettingsSelectorButton
-        selectedCountryName={selectedOptions.selectedCountry.name}
-        selectedCurrency={selectedOptions.selectedCurrency}
-        selectedLanguage={selectedOptions.selectedLanguage}
+        buttonLabel={buttonLabel}
         handleOpen={handleOpen}
         incrementCounter={incrementCounter}
         counter={counter}
@@ -200,7 +209,7 @@ const SettingsSelector = (): JSX.Element => {
 
         {/* Close button */}
         <button onClick={handleClose}>Cancel</button>
-        <button onClick={() => {}}>Save</button>
+        <button onClick={handleSave}>Save</button>
       </Modal>
     </div>
   );

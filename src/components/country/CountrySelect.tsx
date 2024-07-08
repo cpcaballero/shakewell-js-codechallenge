@@ -151,7 +151,8 @@ export const CountrySelect = ({
           value={selectedCountry}
           defaultValue={defaultValue}
           onChange={(newValue: SingleValue<SelectProps>) => {
-            onChange?.("selectedCoutry", newValue?.value || defaultValue.value);
+            if (newValue === null) return;
+            onChange?.("selectedCountry", newValue.value);
             setSelectedCountry(newValue);
           }}
         />
