@@ -149,7 +149,6 @@ const SettingsSelector = (): JSX.Element => {
     name: string,
     value: string | CountryProps
   ) => {
-    console.log(value);
     setSelectedOptions({
       ...selectedOptions,
       [name]: value,
